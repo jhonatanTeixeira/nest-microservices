@@ -1,10 +1,11 @@
-import { CallHandler, ExecutionContext, Inject, NestInterceptor } from '@nestjs/common';
+import {CallHandler, ExecutionContext, Inject, Injectable, NestInterceptor} from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Compra } from '../entity/compra';
 import { ClientKafka } from '@nestjs/microservices';
 import { Request } from 'express';
 
+@Injectable()
 export class CompraRealizadaInterceptor implements NestInterceptor<Compra> {
   constructor(@Inject('KAFKA_CLIENT') readonly kafkaClient: ClientKafka) {}
 

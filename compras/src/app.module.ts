@@ -1,12 +1,22 @@
-import { Module } from '@nestjs/common';
-import { CompraController } from './controller/compra.controller';
-import { CompraService } from './service/compra.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import {Module} from '@nestjs/common';
+import {CompraController} from './controller/compra.controller';
+import {CompraService} from './service/compra.service';
+import {TypeOrmModule} from '@nestjs/typeorm';
+import {ClientsModule, Transport} from '@nestjs/microservices';
+import {Compra} from "./entity/compra";
+import {ItemCompra} from "./entity/item-compra";
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'sqlite.db',
+      entities: [Compra, ItemCompra],
+      synchronize: true,
+      logger: "advanced-console",
+      logging: "all",
+    }),
+    TypeOrmModule.forFeature([Compra]),
     ClientsModule.register([
       {
         name: 'KAFKA_CLIENT',

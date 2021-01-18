@@ -9,7 +9,7 @@ async function bootstrap() {
     .setTitle('Relatorios')
     .setDescription('Microserviços de relatorios de compras')
     .setVersion('1.0')
-    .addTag('relatorio')
+    .addTag('relatorios')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

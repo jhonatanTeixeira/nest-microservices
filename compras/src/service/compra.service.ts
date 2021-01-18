@@ -8,4 +8,8 @@ export class CompraService extends TypeOrmCrudService<Compra> {
   constructor(@InjectRepository(Compra) repository) {
     super(repository);
   }
+
+  save(compra: Compra) {
+    return this.repo.save(compra);
+  }
 }
