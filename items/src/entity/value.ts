@@ -3,6 +3,7 @@ import {ApiProperty} from "@nestjs/swagger";
 import {Item} from "./item";
 import {FieldSet} from "./field-set";
 import {Field} from "./field";
+import {Exclude} from "class-transformer";
 
 @Entity()
 export class Value {
@@ -15,14 +16,16 @@ export class Value {
     value: string;
 
     @ManyToOne(() => Item, {eager: true, nullable: false})
-    @ApiProperty({writeOnly: true, type: Number})
+    // @ApiProperty({writeOnly: true, type: Number})
+    @Exclude()
     item: Item;
 
-    @ManyToOne(() => Field, {eager: true, nullable: false})
+    @ManyToOne(() => Field, {eager: true, nullable: false, persistence: false})
     @ApiProperty({type: Number})
     field: Field;
 
     @ManyToOne(() => FieldSet, {eager: true, nullable: false})
-    @ApiProperty({type: Number, writeOnly: true})
+    // @ApiProperty({type: Number, writeOnly: true})
+    @Exclude()
     fieldSet: FieldSet;
 }

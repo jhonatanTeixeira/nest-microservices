@@ -1,6 +1,9 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {FieldSet} from "./field-set";
 import {ApiProperty} from "@nestjs/swagger";
+import {Value} from "./value";
+import {Exclude, Expose} from "class-transformer";
+import {isIterable} from "rxjs/internal-compatibility";
 
 @Entity()
 export class Item {
@@ -12,7 +15,7 @@ export class Item {
   @ApiProperty()
   nome: string;
 
-  @Column("text", {array: true})
+  @Column("simple-array", {array: true})
   @ApiProperty()
   categorias: string[];
 
@@ -22,9 +25,30 @@ export class Item {
 
   @Column()
   @ApiProperty()
-  preco: string;
+  preco: number;
 
-  @ManyToOne(() => FieldSet, f => f.items, {eager: true})
-  @ApiProperty()
+  @ManyToOne(() => FieldSet, f => f.items, {eager: true, persistence: false})
+  @ApiProperty({type: Number, writeOnly: true})
   fieldSet: FieldSet;
+
+  @OneToMany(() => Value, v => v.item, {eager: false, cascade: true})
+  @Exclude()
+  _values: Value[];
+
+  @Expose()
+  get values() {
+    return this._values || [];
+  }
+
+  set values(values: Value[]) {
+    if (!isIterable(values)) {
+      return;
+    }
+
+    for (const value of values) {
+      value.fieldSet = this.fieldSet;
+    }
+
+    this._values = values;
+  }
 }

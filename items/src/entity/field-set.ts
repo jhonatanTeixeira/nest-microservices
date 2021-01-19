@@ -1,5 +1,5 @@
 import {Field} from "./field";
-import {Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {ApiProperty} from "@nestjs/swagger";
 import {Item} from "./item";
 
@@ -9,7 +9,7 @@ export class FieldSet {
     @ApiProperty({readOnly: true})
     id: number;
 
-    @Column({nullable: false})
+    @Column({nullable: false, unique: true})
     @ApiProperty()
     name: string;
 

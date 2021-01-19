@@ -9,7 +9,6 @@ async function bootstrap() {
       .setTitle('Item')
       .setDescription('Microserviços de items')
       .setVersion('1.0')
-      .addTag('itema')
       .build();
 
   const document = SwaggerModule.createDocument(app, config);

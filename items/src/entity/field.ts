@@ -25,6 +25,10 @@ export class Field {
     @ApiProperty()
     type: FieldType;
 
+    @Column()
+    @ApiProperty()
+    aggregator: boolean;
+
     @ManyToOne(() => FieldSet, f => f.fields)
     fieldSet: FieldSet;
 }

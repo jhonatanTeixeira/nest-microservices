@@ -8,4 +8,9 @@ export class ItemService extends TypeOrmCrudService<Item> {
   constructor(@InjectRepository(Item) itemRepository) {
     super(itemRepository);
   }
+
+  getFieldSet(itemId: number) {
+    return this.repo.findOneOrFail(itemId, {relations: ['fieldSet', 'fieldSet.fields']})
+      .then(item => item.fieldSet)
+  }
 }

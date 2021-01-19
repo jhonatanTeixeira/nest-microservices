@@ -12,7 +12,7 @@ export class ValueService {
   ) {}
 
   save(value: Value) {
-      this.repository.save(value);
+      return this.repository.save(value);
   }
 
   async getValuesForItem(itemId: number) {
@@ -23,7 +23,17 @@ export class ValueService {
       });
   }
 
-  saveValues(values: Value[]) {
-      return this.repository.save(values);
+  saveValues(itemId: number, values: Value[]) {
+    return this.repository.manager.transaction(em => {
+      return this.itemRepository.findOneOrFail(itemId, {relations: ['_values', 'fieldSet']})
+        .then(async item => {
+          await this.repository.remove(item.values);
+
+          item.values = values
+
+          return this.itemRepository.save(item);
+        })
+        .then(item => item.values);
+    });
   }
 }
