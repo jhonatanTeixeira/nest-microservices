@@ -15,16 +15,21 @@ import {ItemService} from '../service/item.service';
 import {ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {FieldSet, Item, Value} from "../entity";
 import {ValueService} from "../service/value.service";
-import {ItemEditadoInterceptor} from "../interceptor/item-editado.interceptor";
 
 @Crud({
   model: {
     type: Item,
   },
+  query: {
+    join: {
+      fieldSet: {
+        eager: true,
+      },
+    },
+  },
 })
 @Controller('items')
 @ApiTags('items')
-@UseInterceptors(ItemEditadoInterceptor)
 export class ItemController implements CrudController<Item> {
   constructor(
     readonly service: ItemService,

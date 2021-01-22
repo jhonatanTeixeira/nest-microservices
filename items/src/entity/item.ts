@@ -2,7 +2,7 @@ import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "type
 import {FieldSet} from "./field-set";
 import {ApiProperty} from "@nestjs/swagger";
 import {Value} from "./value";
-import {Exclude, Expose} from "class-transformer";
+import {Exclude, Expose, Transform} from "class-transformer";
 import {isIterable} from "rxjs/internal-compatibility";
 
 @Entity()
@@ -29,6 +29,7 @@ export class Item {
 
   @ManyToOne(() => FieldSet, f => f.items, {eager: true, persistence: false})
   @ApiProperty({type: Number, writeOnly: true})
+  @Transform((value) => value?.id, {toPlainOnly: true})
   fieldSet: FieldSet;
 
   @OneToMany(() => Value, v => v.item, {eager: false, cascade: true})
@@ -47,6 +48,7 @@ export class Item {
 
     for (const value of values) {
       value.fieldSet = this.fieldSet;
+      value.item = this;
     }
 
     this._values = values;

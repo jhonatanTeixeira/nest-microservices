@@ -7,6 +7,7 @@ import {FieldSetService} from "./service/field-set.service";
 import {FieldSetController} from "./controller/field-set.controller";
 import {Field, FieldSet, Item, Value} from "./entity"
 import {ClientsModule, Transport} from "@nestjs/microservices";
+import {ItemEditadoSubscriber} from "./subscriber/item-editado.subscriber";
 
 @Module({
   imports: [
@@ -33,6 +34,6 @@ import {ClientsModule, Transport} from "@nestjs/microservices";
     ]),
   ],
   controllers: [ItemController, FieldSetController],
-  providers: [ItemService, ValueService, FieldSetService],
+  providers: [ItemService, ValueService, FieldSetService, ItemEditadoSubscriber],
 })
 export class AppModule {}

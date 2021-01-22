@@ -29,3 +29,74 @@ services:
     links:
       - zookeeper
       - kafka
+
+  elastic:
+    image: elastic/elasticsearch:7.10.1
+    ports:
+      - 9200:9200
+
+  catalog:
+    build:
+      context: catalog
+    links:
+      - elastic
+    volumes:
+      - ./catalog:/app
+
+  catalog-integration:
+    build:
+      context: catalog-integration
+    links:
+      - catalog
+      - kafka
+    volumes:
+      - ./catalog-integration:/app
+
+  compras:
+    build:
+      context: compras
+    links:
+      - kafka
+    volumes:
+      - ./compras:/app
+
+  items:
+    build:
+      context: items
+    links:
+      - kafka
+    volumes:
+      - ./items:/app
+
+  pagamentos:
+    build:
+      context: pagamentos
+    links:
+      - kafka
+    volumes:
+      - ./pagamentos:/app
+
+  relatorio-integration:
+    build:
+      context: relatorio-integration
+    links:
+      - kafka
+      - relatorios
+      - usuarios
+      - compras
+      - pagamentos
+    volumes:
+      - ./relatorio-integration:/app
+
+  relatorios:
+    build:
+      context: relatorios
+    volumes:
+      - ./relatorios:/app
+
+  usuarios:
+    build:
+      context: usuarios
+    volumes:
+      - ./usuarios:/app
+
